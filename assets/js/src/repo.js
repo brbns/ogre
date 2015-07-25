@@ -1,5 +1,6 @@
 angular.module('jigsaw', ['ngRoute'])
 
-.controller('repoCtrl', ['$scope', function($scope) {
-	console.log('repoCtrl');
+.controller('repoCtrl', ['$scope', '$routeParams', function($scope, $routeParams) {
+	// console.log('repoCtrl');
+	// console.log($routeParams.param);
 }]);

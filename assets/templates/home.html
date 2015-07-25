@@ -3,7 +3,7 @@
 
 	<div class="repos-cntr">
 		<div class="repo" data-ng-repeat="repo in repos">
-			<p class="repo-name" data-ng-bind="::repo.name"></p>
+			<a  data-test="#/project/{{::repo.name}}" ng-href="/project/{{::repo.name}}" class="repo-name" data-ng-bind="::repo.name"></a>
 		</div>
 	</div>
 </section>

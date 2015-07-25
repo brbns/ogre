@@ -3,18 +3,15 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Hello World</title>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
-	<script type="text/javascript" src="assets/js/app.js"></script>
+	<script type="text/ng-template" src="assets/templates/index.html"></script>
+	<script type="text/ng-template" src="assets/templates/repo.html"></script>
+	<script type="text/javascript" src="assets/js/libs/angular-1.4.3.min.js"></script>
+	<script type="text/javascript" src="assets/js/libs/angular-route-1.4.3.min.js"></script>
+	<script type="text/javascript" src="assets/js/src/app.js"></script>
+	<script type="text/javascript" src="assets/js/src/repo.js"></script>
 </head>
 <body data-ng-app="jigsaw">
-	<section data-ng-controller="homeCtrl">
-		<h1 data-ng-bind="::username"></h1>
-
-		<div class="repos-cntr">
-			<div class="repo" data-ng-repeat="repo in repos">
-				<p class="repo-name" data-ng-bind="::repo.name"></p>
-			</div>
-		</div>
-	</section>
+	<h1>Hello world</h1>
+	<div ng-view></div>
 </body>
 </html>

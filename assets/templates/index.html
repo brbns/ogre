@@ -1,0 +1,9 @@
+<section data-ng-controller="homeCtrl">
+	<h1 data-ng-bind="::username"></h1>
+
+	<div class="repos-cntr">
+		<div class="repo" data-ng-repeat="repo in repos">
+			<p class="repo-name" data-ng-bind="::repo.name"></p>
+		</div>
+	</div>
+</section>

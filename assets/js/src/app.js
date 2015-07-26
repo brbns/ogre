@@ -3,18 +3,12 @@ angular.module('jigsaw', ['ngRoute'])
 .config(['$routeProvider', '$locationProvider',
 	function($routeProvider, $locationProvider) {
 
-		// $locationProvider.html5mode({
-		// 	enabled: true
-		// });
-
 		$routeProvider
 			.when('/projects', {
 				templateUrl: 'assets/templates/home.html',
-				controller: 'homeCtrl'
 			})
 			.when('/project/:projectName', {
 				templateUrl: 'assets/templates/repo.html',
-				controller: 'repoCtrl'
 			})
 			.otherwise({
 				redirectTo: '/projects'
@@ -25,11 +19,15 @@ angular.module('jigsaw', ['ngRoute'])
 
 	}])
 
+.factory('user', [function() {
+	return {};
+}])
 
-.controller('homeCtrl', ['$scope', '$http', function($scope, $http) {
-	console.log('homeCtrl');
+.controller('homeCtrl', ['$scope', '$http', 'user', function($scope, $http, user) {
 	$scope.username = 'pravee-n';
-	$scope.repos = [];
+	$scope.projects = [];
+
+	user.name = $scope.username;
 
 	var endpoints = {
 		'repos': 'https://api.github.com/users/' + $scope.username + '/repos'
@@ -37,19 +35,37 @@ angular.module('jigsaw', ['ngRoute'])
 
 	$http.get(endpoints.repos)
 		.success(function( res ) {
-			console.log(res);
 			if (res !== undefined) {
 				for (var key in res) {
-					$scope.repos.push( {
-						'name': res[key].name,
-						'id': res[key].id
-					} );
+					$scope.projects.push(res[key]);
 				}
-				console.log($scope.repos);
+				user.projects = $scope.projects;
 			}
 
 		})
 		.error(function() {
 
 		});
+
+	$scope.setProjectInfo = function(project) {
+		user.currentProject = project;
+	};
+}])
+
+
+.controller('repoCtrl',
+	['$scope', '$routeParams', 'user', '$http',
+	function($scope, $routeParams, user, $http) {
+		if ($routeParams.projectName && ($routeParams.projectName !== user.currentProject.name)) {
+			return;
+		}
+
+		$scope.project = user.currentProject;
+
+		var readmeURL = $scope.project.url + '/readme';
+
+		$http.get(readmeURL)
+			.success(function(res) {
+				$scope.project.readme = atob(res.content)
+			});
 }]);

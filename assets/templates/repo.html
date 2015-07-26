@@ -1,2 +1,4 @@
-<h1>Hello</h1>
-<h1 data-ng-bind="::repo.name"></h1>
+<section data-ng-controller="repoCtrl">
+	<h1 data-ng-bind="::project.name"></h1>
+	<p data-ng-bind="::project.readme"></p>
+</section>

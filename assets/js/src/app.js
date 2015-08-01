@@ -81,7 +81,7 @@ angular.module('jigsaw', ['ngRoute'])
 .controller('repoCtrl',
 	['$scope', '$routeParams', 'dataSrvc',
 	function($scope, $routeParams, dataSrvc) {
-		$scope.project = [];
+		$scope.project = {};
 		var projectNameFromURL = $routeParams.projectName;
 
 		if (!projectNameFromURL) {
@@ -90,6 +90,7 @@ angular.module('jigsaw', ['ngRoute'])
 		if (!dataSrvc.user.projects.length) {
 			dataSrvc.get(dataSrvc.endpoints.repos)
 				.then(function(res) {
+					dataSrvc.setUserProjects(res.data);
 					dataSrvc.setCurrentProject(projectNameFromURL);
 					$scope.project = dataSrvc.user.currentProject;
 					getReadmeInfo();

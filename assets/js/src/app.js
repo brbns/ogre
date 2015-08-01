@@ -14,58 +14,103 @@ angular.module('jigsaw', ['ngRoute'])
 				redirectTo: '/projects'
 			});
 
-		$locationProvider.html5Mode(true);
-		$locationProvider.hashPrefix('!');
+		// $locationProvider.html5Mode(true);
+		// html5Mode.requireBase(false);
+		// $locationProvider.hashPrefix('!');
 
-	}])
-
-.factory('user', [function() {
-	return {};
 }])
 
-.controller('homeCtrl', ['$scope', '$http', 'user', function($scope, $http, user) {
-	$scope.username = 'pravee-n';
-	$scope.projects = [];
 
-	user.name = $scope.username;
+.service('dataSrvc', ['$http', function($http) {
 
-	var endpoints = {
-		'repos': 'https://api.github.com/users/' + $scope.username + '/repos'
+	var data = {
+		user: {
+			'name': 'pravee-n',
+			'projects': [],
+			'currentProject': {}
+		}
 	};
 
-	$http.get(endpoints.repos)
-		.success(function( res ) {
-			if (res !== undefined) {
-				for (var key in res) {
-					$scope.projects.push(res[key]);
+	data.endpoints = {
+		'repos': 'https://api.github.com/users/' + data.user.name + '/repos'
+	};
+
+	data.get = function(url) {
+		return $http.get(url)
+			.success(function( res ) {
+				if (res !== undefined) {
+					for (var key in res) {
+						data.user.projects.push(res[key]);
+					}
 				}
-				user.projects = $scope.projects;
-			}
 
-		})
-		.error(function() {
-
-		});
-
-	$scope.setProjectInfo = function(project) {
-		user.currentProject = project;
+			});
 	};
+
+	data.setCurrentProject = function(projectName) {
+		for (var i = 0; i < data.user.projects.length; i++) {
+			if (projectName === data.user.projects[i].name) {
+				data.user.currentProject = data.user.projects[i];
+			}
+		}
+	};
+
+	return data;
+}])
+
+.controller('homeCtrl',
+	['$scope', 'dataSrvc',
+	function($scope, dataSrvc) {
+		$scope.username = dataSrvc.user.name;
+		if (!dataSrvc.user.projects.length) {
+			dataSrvc.get(dataSrvc.endpoints.repos);
+		}
+
+		$scope.projects = dataSrvc.user.projects;
+		$scope.setProjectInfo = function(project) {
+			dataSrvc.user.currentProject = project;
+		};
 }])
 
 
 .controller('repoCtrl',
-	['$scope', '$routeParams', 'user', '$http',
-	function($scope, $routeParams, user, $http) {
-		if ($routeParams.projectName && ($routeParams.projectName !== user.currentProject.name)) {
+	['$scope', '$routeParams', 'dataSrvc',
+	function($scope, $routeParams, dataSrvc) {
+		var projectNameFromURL = $routeParams.projectName;
+
+		if (!projectNameFromURL) {
 			return;
 		}
+		if (!dataSrvc.user.projects.length) {
+			dataSrvc.get(dataSrvc.endpoints.repos)
+				.then(function(res) {
+					dataSrvc.setCurrentProject(projectNameFromURL);
+					$scope.project = dataSrvc.user.currentProject;
+					getReadmeInfo();
+				});
+		}
+		else {
+			$scope.project = dataSrvc.user.currentProject;
+			getReadmeInfo();
+		}
 
-		$scope.project = user.currentProject;
+		// else if (projectNameFromURL !== dataSrvc.user.currentProject.name) {
+		// 	return;
+		// }
 
-		var readmeURL = $scope.project.url + '/readme';
+		function getReadmeInfo() {
+			var readmeURL = $scope.project.url + '/readme';
+			dataSrvc.get(readmeURL)
+				.then(function(res) {
+					$scope.project.readme = atob(res.data.content);
+				});
+		}
 
-		$http.get(readmeURL)
-			.success(function(res) {
-				$scope.project.readme = atob(res.content)
-			});
+
+
+
+		// $http.get(readmeURL)
+		// 	.success(function(res) {
+		// 		$scope.project.readme = atob(res.content)
+		// 	});
 }]);

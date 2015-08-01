@@ -36,15 +36,13 @@ angular.module('jigsaw', ['ngRoute'])
 	};
 
 	data.get = function(url) {
-		return $http.get(url)
-			.success(function( res ) {
-				if (res !== undefined) {
-					for (var key in res) {
-						data.user.projects.push(res[key]);
-					}
-				}
+		return $http.get(url);
+	};
 
-			});
+	data.setUserProjects = function(projects) {
+		for (var key in projects) {
+			data.user.projects.push(projects[key]);
+		}
 	};
 
 	data.setCurrentProject = function(projectName) {
@@ -62,11 +60,18 @@ angular.module('jigsaw', ['ngRoute'])
 	['$scope', 'dataSrvc',
 	function($scope, dataSrvc) {
 		$scope.username = dataSrvc.user.name;
+
 		if (!dataSrvc.user.projects.length) {
-			dataSrvc.get(dataSrvc.endpoints.repos);
+			dataSrvc.get(dataSrvc.endpoints.repos)
+				.then(function(res) {
+					dataSrvc.setUserProjects(res.data);
+				});
 		}
 
-		$scope.projects = dataSrvc.user.projects;
+		if (!$scope.projects){
+			$scope.projects = dataSrvc.user.projects;
+		}
+
 		$scope.setProjectInfo = function(project) {
 			dataSrvc.user.currentProject = project;
 		};
@@ -76,6 +81,7 @@ angular.module('jigsaw', ['ngRoute'])
 .controller('repoCtrl',
 	['$scope', '$routeParams', 'dataSrvc',
 	function($scope, $routeParams, dataSrvc) {
+		$scope.project = [];
 		var projectNameFromURL = $routeParams.projectName;
 
 		if (!projectNameFromURL) {
@@ -94,10 +100,6 @@ angular.module('jigsaw', ['ngRoute'])
 			getReadmeInfo();
 		}
 
-		// else if (projectNameFromURL !== dataSrvc.user.currentProject.name) {
-		// 	return;
-		// }
-
 		function getReadmeInfo() {
 			var readmeURL = $scope.project.url + '/readme';
 			dataSrvc.get(readmeURL)
@@ -105,12 +107,4 @@ angular.module('jigsaw', ['ngRoute'])
 					$scope.project.readme = atob(res.data.content);
 				});
 		}
-
-
-
-
-		// $http.get(readmeURL)
-		// 	.success(function(res) {
-		// 		$scope.project.readme = atob(res.content)
-		// 	});
 }]);

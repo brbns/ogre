@@ -1,12 +1,13 @@
-<section data-ng-controller="homeCtrl">
-	<h1 data-ng-bind="::username"></h1>
-
-	<div class="projects-cntr">
-		<div class="project" data-ng-repeat="project in projects">
-			<a class="project-name"
-			   href="#/project/{{::project.name}}"
+<section class="repo-list-container" data-ng-controller="homeCtrl">
+	<h1 class="owner-name" data-ng-bind="::username"></h1>
+	<div class="repo-list">
+		<div class="repo-list-item" data-ng-repeat="project in projects">
+			<h4 class="repo-item-name">
+			   <a href="#/project/{{::project.name}}"
 			   data-ng-bind="::project.name"
 			   data-ng-click="setProjectInfo(project)"></a>
+			</h4>
+            <div class="repo-item-description" data-ng-bind="::project.description"></div>
 		</div>
 	</div>
 </section>

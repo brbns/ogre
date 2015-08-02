@@ -1,0 +1,95 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400italic,600,600italic);
+@import url(http://fonts.googleapis.com/css?family=PT+Mono);
+
+$type-serif : 'Source Sans Pro', sans-serif;
+$type-sans-serif : 'PT Mono', ;
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-family: $type-sans-serif;
+    font-weight: 700;
+    color: #3c3c3c;
+    margin: 1em 0 1em 0;
+}
+
+h1 { font-size: scale( 4 ); }
+h2 { font-size: scale( 3 ); }
+h3 { font-size: scale( 2 ); }
+
+body {
+    font-family: $type-serif;
+    font-size: scale( 1 );
+    line-height: 1.5;
+    color: lighten( #3c3c3c, 5% );
+    width: 100%;
+    height: 100%;
+    .wf-loading {
+
+    }
+}
+
+%type-s {
+    font-size: scale( 0 );
+    line-height: scale( 2, unitless );
+}
+
+%type-xs {
+    font-size: scale( -1 );
+    line-height: scale( 3, unitless );
+}
+
+%type-xl {
+    font-size: scale( 6 );
+    line-height: 1;
+}
+
+%type-l {
+    font-size: scale( 5 );
+    line-height: 1;
+}
+
+
+li {
+    padding: 0.5em 0 0 0 ;
+}
+
+a {
+    border-bottom: 1px dashed lighten( #3c3c3c, 50% );
+    padding-bottom: 0.25em;
+    text-decoration: none;
+    color: inherit;
+    // font-weight: 700;
+    &:hover {
+        color: $green;
+        border-color: $green;
+    }
+}
+
+blockquote {
+    position: relative;
+    overflow: hidden;
+    font-weight: 400;
+    font-family: $type-serif;
+    // color: lighten( #3c3c3c, 50% );
+    // color: #EC3549;
+    margin: 1em 1em 1em 3em;
+    padding-left: 1em;
+    border-left: 4px solid #EC3549;
+}
+
+
+.wf-loading {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        visibility: hidden;
+    }
+    p {
+        visibility: hidden;
+    }
+}

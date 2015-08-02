@@ -25,7 +25,7 @@ angular.module('jigsaw', ['ngRoute'])
 
 	var data = {
 		user: {
-			'name': 'pravee-n',
+			'name': 'drecodeam',
 			'projects': [],
 			'currentProject': {}
 		}

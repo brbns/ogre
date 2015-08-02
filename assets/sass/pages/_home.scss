@@ -1,0 +1,27 @@
+.repo-list-container {
+  position: relative;
+  overflow: hidden;
+  padding: 5em 5%;
+  .owner-name {
+    position: relative;
+    overflow: hidden;
+    float: none;
+  }
+  .repo-list {
+    position: relative;
+    overflow: hidden;
+    .repo-list-item {
+      width: 30%;
+      position: relative;
+      overflow: hidden;
+      float: left;
+      margin: 2em 1.5%;
+      .repo-item-description {
+        height: 7.5em;
+        position: relative;
+        overflow: hidden;
+        padding: 0 20px 0 0;
+      }
+    }
+  }
+}

@@ -196,7 +196,7 @@ module.exports = function (grunt) {
     // Push the built files to the gh-pages branch
     'gh-pages': {
       options: {
-        base: 'dist',
+        base: 'build',
         branch: 'gh-pages'
       },
       src: ['**']
@@ -209,6 +209,6 @@ module.exports = function (grunt) {
   grunt.registerTask('default', ['sass', 'postcss', 'copy', 'uglify', 'connect', 'watch' ]);
 
   // Build task
-  grunt.registerTask('build', ['assemble', 'sass', 'postcss', 'purifycss', 'gh-pages' ]);
+  grunt.registerTask('build', ['sass', 'postcss', 'copy','uglify', 'gh-pages' ]);
 
 };
